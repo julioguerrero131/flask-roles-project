@@ -1,0 +1,59 @@
+DROP TABLE IF EXISTS Rol;
+DROP TABLE IF EXISTS Tipo_Establecimiento;
+DROP TABLE IF EXISTS Producto;
+DROP TABLE IF EXISTS Establecimiento;
+DROP TABLE IF EXISTS Usuario;
+DROP TABLE IF EXISTS Establecimiento_Producto;
+
+-- 1. Tablas independientes
+
+CREATE TABLE Rol (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom_rol VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Tipo_Establecimiento (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Producto (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    precio DECIMAL(10,2) NOT NULL
+);
+
+-- 2. Tablas con dependencias
+
+CREATE TABLE Establecimiento (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    tipo INTEGER NOT NULL,
+    FOREIGN KEY (tipo) REFERENCES Tipo_Establecimiento(id) ON DELETE RESTRICT
+);
+
+CREATE TABLE Usuario (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    correo VARCHAR(255) NOT NULL UNIQUE,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    rol INTEGER NOT NULL,
+    id_establecimiento INTEGER,
+    activo BOOLEAN NOT NULL DEFAULT 1,
+    creado DATETIME DEFAULT CURRENT_TIMESTAMP,
+    modificado DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (rol) REFERENCES Rol(id) ON DELETE RESTRICT,
+    FOREIGN KEY (id_establecimiento) REFERENCES Establecimiento(id) ON DELETE SET NULL
+);
+
+-- 3. Tablas intermedias
+
+CREATE TABLE Establecimiento_Producto (
+    id_establecimiento INTEGER NOT NULL,
+    id_producto INTEGER NOT NULL,
+    cantidad INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (id_establecimiento, id_producto),
+    FOREIGN KEY (id_establecimiento) REFERENCES Establecimiento(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES Producto(id) ON DELETE CASCADE
+);
