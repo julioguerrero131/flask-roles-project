@@ -27,9 +27,9 @@ def create_app(test_config=None):
     init_db_app(app)
 
     # create commands
-    from .commands import create_admin_command, create_admin_role_command
+    from .commands import create_admin_command, create_roles_command
     app.cli.add_command(create_admin_command)
-    app.cli.add_command(create_admin_role_command)
+    app.cli.add_command(create_roles_command)
 
     # blueprints
     from . import auth
