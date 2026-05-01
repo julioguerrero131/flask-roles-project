@@ -1,9 +1,7 @@
 DROP TABLE IF EXISTS Rol;
 DROP TABLE IF EXISTS Tipo_Establecimiento;
-DROP TABLE IF EXISTS Producto;
 DROP TABLE IF EXISTS Establecimiento;
 DROP TABLE IF EXISTS Usuario;
-DROP TABLE IF EXISTS Establecimiento_Producto;
 
 -- 1. Tablas independientes
 
@@ -15,12 +13,6 @@ CREATE TABLE Rol (
 CREATE TABLE Tipo_Establecimiento (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE Producto (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre VARCHAR(100) NOT NULL,
-    precio DECIMAL(10,2) NOT NULL
 );
 
 -- 2. Tablas con dependencias
@@ -45,15 +37,4 @@ CREATE TABLE Usuario (
     modificado DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (rol) REFERENCES Rol(id) ON DELETE RESTRICT,
     FOREIGN KEY (id_establecimiento) REFERENCES Establecimiento(id) ON DELETE SET NULL
-);
-
--- 3. Tablas intermedias
-
-CREATE TABLE Establecimiento_Producto (
-    id_establecimiento INTEGER NOT NULL,
-    id_producto INTEGER NOT NULL,
-    cantidad INTEGER NOT NULL DEFAULT 0,
-    PRIMARY KEY (id_establecimiento, id_producto),
-    FOREIGN KEY (id_establecimiento) REFERENCES Establecimiento(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_producto) REFERENCES Producto(id) ON DELETE CASCADE
 );

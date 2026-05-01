@@ -17,14 +17,6 @@ class TipoEstablecimiento(db.Model):
     nombre = db.Column(db.String(50), nullable=False)
 
 
-class Producto(db.Model):
-    __tablename__ = "Producto"
-
-    id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100), nullable=False)
-    precio = db.Column(db.Numeric(10, 2), nullable=False)
-
-
 class Establecimiento(db.Model):
     __tablename__ = "Establecimiento"
 
@@ -54,19 +46,3 @@ class Usuario(db.Model):
     activo = db.Column(db.Boolean, nullable=False, default=True)
     creado = db.Column(db.DateTime, nullable=False, server_default=func.current_timestamp())
     modificado = db.Column(db.DateTime, nullable=False, server_default=func.current_timestamp())
-
-
-class EstablecimientoProducto(db.Model):
-    __tablename__ = "Establecimiento_Producto"
-
-    id_establecimiento = db.Column(
-        db.Integer,
-        db.ForeignKey("Establecimiento.id", ondelete="CASCADE"),
-        primary_key=True,
-    )
-    id_producto = db.Column(
-        db.Integer,
-        db.ForeignKey("Producto.id", ondelete="CASCADE"),
-        primary_key=True,
-    )
-    cantidad = db.Column(db.Integer, nullable=False, default=0)
