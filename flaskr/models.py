@@ -7,7 +7,7 @@ class Rol(db.Model):
     __tablename__ = "Rol"
 
     id = db.Column(db.Integer, primary_key=True)
-    nom_rol = db.Column(db.String(50), nullable=False)
+    nombre = db.Column(db.String(50), nullable=False)
 
 
 class TipoEstablecimiento(db.Model):

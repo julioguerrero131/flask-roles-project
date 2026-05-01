@@ -26,6 +26,11 @@ def create_app(test_config=None):
     os.makedirs(app.instance_path, exist_ok=True)
     init_db_app(app)
 
+    # create commands
+    from .commands import create_admin_command, create_admin_role_command
+    app.cli.add_command(create_admin_command)
+    app.cli.add_command(create_admin_role_command)
+
     # a simple page that says hello
     @app.route('/hello')
     def hello():

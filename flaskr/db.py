@@ -16,8 +16,6 @@ def init_db():
     db.drop_all()
     db.create_all()
 
-# flask --app flaskr init-db
-
 @click.command('init-db')
 def init_db_command():
     """Clear the existing data and create new tables."""

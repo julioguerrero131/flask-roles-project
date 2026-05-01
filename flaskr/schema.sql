@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS Usuario;
 
 CREATE TABLE Rol (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom_rol VARCHAR(50) NOT NULL
+    nombre VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE Tipo_Establecimiento (
