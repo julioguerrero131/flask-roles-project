@@ -12,7 +12,7 @@ def set_sqlite_pragma(dbapi_connection, _connection_record):
     cursor.close()
 
 def init_db():
-    from . import models
+    from . import models  # noqa
     db.drop_all()
     db.create_all()
 
