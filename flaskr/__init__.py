@@ -31,6 +31,10 @@ def create_app(test_config=None):
     app.cli.add_command(create_admin_command)
     app.cli.add_command(create_admin_role_command)
 
+    # blueprints
+    from . import auth
+    app.register_blueprint(auth.bp)
+
     # a simple page that says hello
     @app.route('/hello')
     def hello():
