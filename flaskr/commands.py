@@ -10,39 +10,54 @@ from werkzeug.security import generate_password_hash
 @click.argument("password")
 @with_appcontext
 def create_admin_command(correo, password):
-    from .models import Usuario 
-    
+    """Crea un usuario administrador."""
+    from .models import Usuario, Rol
+
+    admin_role = Rol.query.filter_by(nombre='admin').first()
+    if not admin_role:
+        click.echo("❌ Error: El rol 'admin' no existe. Ejecuta 'flask create-roles' primero.")
+        return
+
+    if Usuario.query.filter_by(correo=correo).first():
+        click.echo(f"ℹ️  El usuario '{correo}' ya existe.")
+        return
+
     admin = Usuario(
         correo=correo,
         nombre='Admin',
         apellido='User',
         password=generate_password_hash(password),
-        rol=1,
+        rol=admin_role.id,
         id_establecimiento=None
     )
-    
+
     try:
         db.session.add(admin)
         db.session.commit()
         click.echo(f"✅ Administrador {correo} creado con éxito.")
     except Exception as e:
         db.session.rollback()
-        click.echo(f"❌ Error al crear el administrador: {e}")
+        click.echo(f"❌ Error inesperado al crear el administrador: {e}")
 
 
-@click.command("create-admin-role")
+@click.command("create-roles")
 @with_appcontext
-def create_admin_role_command():
+def create_roles_command():
+    """Crea los roles iniciales (admin, manager, vendedor) si no existen."""
     from .models import Rol
 
-    admin_role = Rol(
-        nombre='admin'
-    )
+    roles_to_create = ['admin', 'manager', 'vendedor']
 
     try:
-        db.session.add(admin_role)
+        for role_name in roles_to_create:
+            if not Rol.query.filter_by(nombre=role_name).first():
+                new_role = Rol(nombre=role_name)
+                db.session.add(new_role)
+                click.echo(f"✅ Rol '{role_name}' creado.")
+            else:
+                click.echo(f"ℹ️  Rol '{role_name}' ya existe.")
         db.session.commit()
-        click.echo("✅ Rol de administrador creado con éxito.")
+        click.echo("\n✨ Operación de roles completada.")
     except Exception as e:
         db.session.rollback()
-        click.echo(f"❌ Error al crear el rol de administrador: {e}")
+        click.echo(f"❌ Error al procesar los roles: {e}")
